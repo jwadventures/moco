@@ -1,0 +1,68 @@
+
+
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Video
+  ExpiresByType video/mp4 "access plus 1 year"
+  ExpiresByType video/mpeg "access plus 1 year"
+
+  # CSS, JavaScript
+  # ExpiresByType text/css "access plus 1 month"
+  # ExpiresByType text/javascript "access plus 1 month"
+  # ExpiresByType application/javascript "access plus 1 month"
+
+  # Others
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+
+#<IfModule mod_rewrite.c>
+
+allow from 103.14.41.18 120.138.27.221 158.140.224.226
+
+deny from all
+
+
+
+    RewriteEngine On
+
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# 08-08-19
+
+	
+    	RewriteCond %{REQUEST_FILENAME} !-d	
+	RewriteCond %{REQUEST_FILENAME}/.php !-f
+	
+	RewriteRule ^user/([a-zA-Z0-9]+) /phpscripts/user.php?id=$1 [NC,L]   
+	RewriteRule ^user/ /phpscripts/user.php?id=0 [NC,L]	
+	#No Case and L only use this rule more rules to follow 
+ 
+
+	RewriteRule ^company/([a-zA-Z0-9]+) /phpscripts/company.php?id=$1 [NC,L]   
+	RewriteRule ^company/ /phpscripts/company.php?id=0 [NC,L]
+
+	 RewriteRule ^api/([a-zA-Z0-9]+) api.php?Company=$1 [NC,L]   
+	 RewriteRule ^api/ api.php?Company=MOCO [NC,L]  
+
+# pelican
+
+	RewriteRule ^apiV1/([a-zA-Z0-9]+) /apiV1/api.php?table=$1,rid=$1 [NC,L]   
+	RewriteRule ^apiV1/ /apiV1/api.php?rid=0 [NC,L]
+
+
+#</IfModule>

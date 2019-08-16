@@ -1,0 +1,22 @@
+<html>
+<head>
+<h1> Menu</h1>
+</head>
+<body>
+<script type="text/javascript">
+$.getJSON( 'http://moco.nz/user-initialise.php', function( data ){
+	console.log $data;
+  var $menu = $( '#navbarNav ul.navbar-nav' );
+  $.each( data, function(){
+    var url = this.Program || '#';
+    $menu.append(
+      '<li class="nav-item">' +
+        '<a class="nav-link" href="' + url + '">' + ( this.Title || this.ID ) + '</a>' +
+      '</li>'
+    );
+  });
+});
+</script>
+
+</body>
+</html>

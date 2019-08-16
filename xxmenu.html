@@ -1,0 +1,107 @@
+<html>
+<head>
+<h1> Menu</h1>
+</head>
+<body>
+
+<div id='jqxMenu'>     
+</div>
+
+<script type="text/javascript">
+
+//var data = getJSON('http://moco.nz/user-initialise.php');
+
+var request = new XMLHttpRequest();
+request.open('GET', 'http://moco.nz/user-initialise.php', true);
+
+request.onload = function() {
+  if (request.status >= 200 && request.status < 400) {
+    // Success!
+    var data = JSON.parse(request.responseText);
+    console.log (data);
+  } else {
+    // We reached our target server, but it returned an error
+
+  }
+};
+
+request.onerror = function() {
+  // There was a connection error of some sort
+};
+
+request.send();
+
+
+
+
+var builddata = function () {
+    var source = [];
+    var items = [];
+    // build hierarchical source.
+    for (i = 0; i < data.length; i++) {
+        var item = data[i];
+        var label = item["text"];
+        var parentid = item["parentid"];
+        var id = item["id"];
+
+        if (items[parentid]) {
+            var item = { parentid: parentid, label: label, item: item };
+            if (!items[parentid].items) {
+                items[parentid].items = [];
+            }
+            items[parentid].items[items[parentid].items.length] = item;
+            items[id] = item;
+        }
+        else {
+            items[id] = { parentid: parentid, label: label, item: item };
+            source[id] = items[id];
+        }
+    }
+    return source;
+}
+var source = builddata();
+
+
+var buildUL = function (parent, items) {
+    $.each(items, function () {
+        if (this.label) {
+            // create LI element and append it to the parent element.
+            var li = $("<li>" + this.label + "</li>");
+            li.appendTo(parent);
+            // if there are sub items, call the buildUL function.
+            if (this.items && this.items.length > 0) {
+                var ul = $("<ul></ul>");
+                ul.appendTo(li);
+                buildUL(ul, this.items);
+            }
+        }
+    });
+}
+var ul = $("<ul></ul>");
+ul.appendTo("#jqxMenu");
+buildUL(ul, source);
+//ter that, we use the script below to create the Menu
+
+$("#jqxMenu").jqxMenu({ width: '600', height: '30px'});
+
+
+
+/*
+$.getJSON( 'http://moco.nz/user-initialise.php', function( data ){
+	console.log (data);
+  var $menu = $( '#navbarNav ul.navbar-nav' );
+  $.each( data, function(){
+    var url = this.Program || '#';
+    $menu.append(
+      '<li class="nav-item">' +
+        '<a class="nav-link" href="' + url + '">' + ( this.Title || this.ID ) + '</a>' +
+      '</li>'
+    );
+  });
+});
+*/
+
+</script>
+
+</body>
+</html>
